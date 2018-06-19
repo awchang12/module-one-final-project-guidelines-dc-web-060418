@@ -1,139 +1,38 @@
 require_relative '../config/environment'
+require_relative './run_helper'
 
-def welcome 
-
-    puts "Welcome to our hiking application!"
-
-end
-
-def get_user_name
-    puts "please enter your username"
-
-    user_name = gets.chomp
-
-    user = User.find_or_create_by(name: user_name)
-
-    puts "thanks #{user.name}!"
-    
-    user
-end
-
-def help
-    puts "I accept the following commands:
-    - help: displays this help message.
-    - search by length: searches the list of hikes between given paramters.
-    - search by difficulty: searches list of hikes based on difficulty.
-    - my hikes: displays a list of your saved hikes.
-    - delete hike: deletes desired hike from your saved hikes.
-    - exit: exits this program."
-end
-
-def exit
-    puts "HAPPY HIKING!!!"
-end
-
+#---- runs the cli app ---
 
 welcome
-
 user = get_user_name
-
 help
+response = get_user_command
 
-puts "please enter a command:"
+until response == "exit"
+  case response
+  when "search by length"
+      user.search_by_length
+      # user.save_hike_from_search
 
-user_response = gets.chomp.downcase
+  when "search by difficulty"
+      user.search_by_difficulty
+      user.save_hike_from_search
 
-until user_response == "exit"
-    if user_response == "search by length"
-        puts "please enter minimum distance:"
-        
-        min_distance = gets.chomp
-       
-        puts "please eneter maximum distance:"
+  when "my hikes"
+    user = User.find_by_id(user.id)
+    user.display_my_hikes
 
-        max_distance = gets.chomp
+  when "delete hike"
+    user.delete_hike
 
-        user.search_hikes_by_length(min_distance, max_distance)
-    
-        puts "Would you like to save a hike? yes or no?"
+  else
+    invalid_command
 
-        puts ""
+  end
 
-        users_yes_or_no = gets.chomp
+  help
+  response = get_user_command
 
-        if users_yes_or_no == "yes"
-            puts "Please enter a Hike ID"
-
-            users_hike_id_response = gets.chomp
-
-            user.save_hike(users_hike_id_response)
-
-            puts "Hike has been saved to your hikes"
-     
-        end
-
-        puts ""
-    
-    elsif user_response == "search by difficulty"
-        puts "The difficulty selections are listed below:
-        - green - least strenuous
-        - greenBlue -
-        - blue- 
-        - blueBlack -
-        - black - most strenuous"
-
-        puts "please enter difficulty"
-        
-        user_difficulty = gets.chomp
-
-        user.search_hikes_by_difficulty(user_difficulty)
-
-        puts "Would you like to save a hike? yes or no?"
-
-        puts ""
-
-        users_yes_or_no = gets.chomp
-
-        if users_yes_or_no == "yes"
-            puts "Please enter a Hike ID"
-
-            users_hike_id_response = gets.chomp
-
-            puts "Hike has been saved to your hikes"
-
-            user.save_hike(users_hike_id_response)
-            
-            binding.pry
-            
-        end
-
-        puts ""
-
-    elsif user_response == "my hikes"
-        puts "Your awesome hikes"
-        user = User.find_by_id(user.id)
-        user.display_my_hikes
-
-    elsif user_response == "delete hike"
-        user.display_my_hikes
-        
-        puts "Please enter a Hike ID"
-
-        users_hike_id_response = gets.chomp
-
-        user.delete_hike(users_hike_id_response)
-
-        puts ""
-
-    else
-        puts "please enter valid command"
-        puts ""
-
-    end
-    help
-
-    puts "please enter a command:"
-    user_response = gets.chomp
 end
 
 exit
