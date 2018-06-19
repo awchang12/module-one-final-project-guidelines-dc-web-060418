@@ -4,6 +4,7 @@ require_relative './run_helper'
 #---- runs the cli app ---
 
 welcome
+# byebug
 user = get_user_name
 help
 response = get_user_command

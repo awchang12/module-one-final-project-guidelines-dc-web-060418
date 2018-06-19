@@ -40,19 +40,21 @@ class User < ActiveRecord::Base
 
 
     def search_by_length
+
       puts "Please enter minimum distance:"
       min_distance = gets.chomp
 
-      puts "Please eneter maximum distance:"
+      puts "Please enter maximum distance:"
       max_distance = gets.chomp
-      #self.search_hikes_by_length(min_distance, max_distance)
+
 
       if self.search_hikes_by_length(min_distance, max_distance).empty?
         puts "We could not locate any hikes with this input."
         puts "Either input was invalid or hikes could not be found within the given range."
         self.search_by_length
       else
-        self.search_hikes_by_length(min_distance, max_distance)
+
+        # self.search_hikes_by_length(min_distance, max_distance)
         self.save_hike_from_search
       end
 
@@ -124,7 +126,6 @@ class User < ActiveRecord::Base
   def search_hikes_by_length(min_length, max_length)
 
       hike_arr = Hike.all.where("length > ? AND length < ?",  min_length, max_length)
-
 
       hike_arr.each do |hike|
           puts "HIKE ID: #{hike.id}. #{hike.name} - #{hike.length} miles - #{hike.difficulty}"
