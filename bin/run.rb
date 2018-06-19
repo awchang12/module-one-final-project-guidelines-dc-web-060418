@@ -103,6 +103,7 @@ until user_response == "exit"
 
             user.save_hike(users_hike_id_response)
             
+            binding.pry
             
         end
 
@@ -110,6 +111,7 @@ until user_response == "exit"
 
     elsif user_response == "my hikes"
         puts "Your awesome hikes"
+        user = User.find_by_id(user.id)
         user.display_my_hikes
 
     elsif user_response == "delete hike"
