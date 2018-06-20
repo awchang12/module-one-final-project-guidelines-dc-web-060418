@@ -4,8 +4,9 @@ class Hike < ActiveRecord::Base
 
     def self.search_hikes_by_length(min_length, max_length)
 
-        hike_arr = Hike.all.where("length > ? AND length < ?",  min_length, max_length)
+        hike_arr = Hike.all.where("length >= ? AND length <= ?",  min_length, max_length)
         sorted_by_id = hike_arr.sort_by {|hike| hike.id}
+        binding.pry
     end
 
     def self.search_hikes_by_difficulty(difficulty)
