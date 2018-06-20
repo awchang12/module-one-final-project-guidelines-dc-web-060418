@@ -6,7 +6,7 @@ end
 
 def get_user_name
     puts "Please enter your Username:"
-    user_name = gets.chomp.strip
+    user_name = gets.chomp.downcase.strip
     user = User.find_or_create_by(name: user_name)
     puts "\nWelcome, #{user.name}!"
     user

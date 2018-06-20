@@ -75,20 +75,36 @@ class User < ActiveRecord::Base
 
 #------------ HELPER METHODS -------------------------------------
 
-  def save_hike_from_search
-    puts "Would you like to save a hike? yes or no?\n\n"
+def save_hike_from_search
+  # puts "Would you like to save a hike? yes or no?\n\n"
 
-    users_yes_or_no = gets.chomp.downcase.strip
+  # users_yes_or_no = gets.chomp.downcase.strip
+  user_answer = yes_or_no?
 
-    if users_yes_or_no == "yes" || users_yes_or_no == "y"
-        puts "\nPlease enter a Hike ID"
-        users_hike_id_response = gets.chomp.gsub(/[.\s]/, "")
-
-        self.save_hike(users_hike_id_response)
-
-        puts "\nThis hike has been saved to your Hikes\n\n"
-    end
+  case user_answer
+  when "yes" || "y"
+    save_yes_sequence
+  when "no" || "n"
+    puts ""
+  else
+    puts "\nPlease enter a valid answer\n\n"
+    self.save_hike_from_search
   end
+
+end
+
+def yes_or_no? #gets user input of yes or no or invalid answer
+  puts "Would you like to save a hike? yes or no?"
+  users_yes_or_no = gets.chomp.downcase.strip
+end
+
+def save_yes_sequence
+  puts "\nPlease enter a Hike ID"
+  users_hike_id_response = gets.chomp.gsub(/[.\s]/, "")
+  # Still need to take into account if response is not a number. we will come to it if we have time.
+  self.save_hike(users_hike_id_response)
+  puts "\nThis hike has been saved to your Hikes\n\n"
+end
 
   def save_hike(num)
       SavedHike.find_or_create_by(
@@ -104,3 +120,8 @@ class User < ActiveRecord::Base
   end
 
 end
+
+
+
+
+

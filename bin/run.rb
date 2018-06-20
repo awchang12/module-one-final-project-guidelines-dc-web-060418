@@ -21,6 +21,7 @@ until response == "exit"
     user.display_my_hikes
 
   when "deletehike"
+    user = User.find_by_id(user.id)
     user.delete_hike
 
   else
