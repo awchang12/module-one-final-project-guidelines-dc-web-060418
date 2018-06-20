@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 3) do
+ActiveRecord::Schema.define(version: 4) do
 
   create_table "hikes", force: :cascade do |t|
     t.string "name"
     t.string "summary"
     t.float  "length"
     t.string "difficulty"
+    t.string "location"
   end
 
   create_table "saved_hikes", force: :cascade do |t|

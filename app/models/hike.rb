@@ -17,8 +17,8 @@ end
 
 def display_hikes(hike_arr)
     hike_arr.each do |hike|
-        puts "\nHIKE ID: #{hike.id}. #{hike.name} - #{hike.length} miles - #{hike.difficulty}"
-        puts "-------------------------------------------------------------"
+        puts "\nHIKE ID: #{hike.id}. #{hike.name} - #{hike.location} - #{hike.length} miles - #{hike.difficulty}"
+        puts "--------------------------------------------------------------------------------------------"
         puts "#{hike.summary}\n\n"
     end
 end

@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
 
 
     def search_by_difficulty
-        puts "\nThe difficulty selections are listed below\nfrom least strenuous to most strenuous:\ngreen || greenBlue || blue || blueBlack || black"
+      puts "\nThe difficulty selections are listed below from least strenuous to most strenuous:\ngreen || greenBlue || blue || blueBlack"
       puts "\nPlease enter difficulty"
 
       user_difficulty = gets.chomp.gsub(/[\s]/, "")
@@ -120,8 +120,3 @@ end
   end
 
 end
-
-
-
-
-
