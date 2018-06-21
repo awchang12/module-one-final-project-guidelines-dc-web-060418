@@ -5,7 +5,7 @@ describe "Hike" do
 
   describe ".search_hikes_by_length" do
     it "returns an array of hikes within a given range" do
-      expect(Hike.search_hikes_by_length(2.7, 2.8)).to include(Hike.find_by_id(17))
+      expect(Hike.search_hikes_by_length(2.7, 2.8)).to include(Hike.find_by_id(17), Hike.find_by_id(23))
     end
   end
 
