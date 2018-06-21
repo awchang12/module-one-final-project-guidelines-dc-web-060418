@@ -72,39 +72,57 @@ class User < ActiveRecord::Base
 
     end
 
+    def write_review
+      self.display_my_hikes
+
+      puts "\nEnter HIKE ID of hike you would like to review:"
+      id = gets.chomp.strip
+
+      puts "\nEnter your rating for the hike! 1 being lowest - 5 highest."
+      rating = gets.chomp.strip.to_i
+
+      puts "\nWrite a brief statement of your experience!"
+      review = gets.chomp.strip
+
+      self.save_rating_and_review(rating, review, id)
+
+      puts "\nThanks for your feedback! Your input makes our application more valuable to our users!\n\n"
+      
+    end
+
 
 #------------ HELPER METHODS -------------------------------------
 
-def save_hike_from_search
-  # puts "Would you like to save a hike? yes or no?\n\n"
+  def save_hike_from_search
+    # puts "Would you like to save a hike? yes or no?\n\n"
 
-  # users_yes_or_no = gets.chomp.downcase.strip
-  user_answer = yes_or_no?
+    # users_yes_or_no = gets.chomp.downcase.strip
+    user_answer = yes_or_no?
 
-  case user_answer
-  when "yes" || "y"
-    save_yes_sequence
-  when "no" || "n"
-    puts ""
-  else
-    puts "\nPlease enter a valid answer\n\n"
-    self.save_hike_from_search
+    case user_answer
+    when "yes" || "y"
+      save_yes_sequence
+    when "no" || "n"
+      puts ""
+    else
+      puts "\nPlease enter a valid answer\n\n"
+      self.save_hike_from_search
+    end
+
   end
 
-end
+  def yes_or_no? #gets user input of yes or no or invalid answer
+    puts "Would you like to save a hike? yes or no?"
+    users_yes_or_no = gets.chomp.downcase.strip
+  end
 
-def yes_or_no? #gets user input of yes or no or invalid answer
-  puts "Would you like to save a hike? yes or no?"
-  users_yes_or_no = gets.chomp.downcase.strip
-end
-
-def save_yes_sequence
-  puts "\nPlease enter a Hike ID"
-  users_hike_id_response = gets.chomp.gsub(/[.\s]/, "")
-  # Still need to take into account if response is not a number. we will come to it if we have time.
-  self.save_hike(users_hike_id_response)
-  puts "\nThis hike has been saved to your Hikes\n\n"
-end
+  def save_yes_sequence
+    puts "\nPlease enter a Hike ID"
+    users_hike_id_response = gets.chomp.gsub(/[.\s]/, "")
+    # Still need to take into account if response is not a number. we will come to it if we have time.
+    self.save_hike(users_hike_id_response)
+    puts "\nThis hike has been saved to your Hikes\n\n"
+  end
 
   def save_hike(num)
       SavedHike.find_or_create_by(
@@ -113,10 +131,14 @@ end
       )
   end
 
-
   def delete_hike_from_db(num)
       SavedHike.where(user_id: self.id, hike_id: num).destroy_all
       self.hikes.delete(hike_id: num)
+  end
+
+  def save_rating_and_review(rating, review, hike_id)
+    hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
+    hike.update(rating: rating, review: review)
   end
 
 end

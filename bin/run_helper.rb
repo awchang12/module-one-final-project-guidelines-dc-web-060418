@@ -18,6 +18,7 @@ def help
     - search by difficulty:  searches the list of hikes based on difficulty.
     - my hikes:              displays a list of your saved hikes.
     - delete hike:           deletes specified hike from your saved hikes.
+    - write review:          write a review for one of your saved hikes.
     - exit:                  exits this program.\n\n"
 end
 

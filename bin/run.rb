@@ -24,6 +24,9 @@ until response == "exit"
     user = User.find_by_id(user.id)
     user.delete_hike
 
+  when "writereview"
+    user = User.find_by_id(user.id)
+    user.write_review
   else
     invalid_command
 
