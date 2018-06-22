@@ -19,6 +19,9 @@ def help
     - my hikes:              displays a list of your saved hikes.
     - delete hike:           deletes specified hike from your saved hikes.
     - write review:          write a review for one of your saved hikes.
+    - update review:         update a review you've already submitted.
+    - display my reviews:    displays reviews you've written.
+    - delete a review:       deletes a review you've written.
     - exit:                  exits this program.\n\n"
 end
 

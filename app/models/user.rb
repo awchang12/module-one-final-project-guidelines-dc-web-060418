@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
     end
 
     def update_review
-      self.display_hikes
+      self.display_my_hikes
 
       puts "\nEnter HIKE ID of hike you would like to change:"
       id = gets.chomp.strip
@@ -108,6 +108,27 @@ class User < ActiveRecord::Base
 
       puts "\nThanks for your updated feedback!"
 
+    end
+
+    def display_users_reviews
+      user_hikes = SavedHike.all.where(user_id: self.id)
+      user_hikes.each do |saved_hike|
+        if saved_hike.review != nil && saved_hike.rating != nil
+          display_review(saved_hike.hike_id)
+        end
+      end
+    end
+
+    def delete_user_review
+      self.display_users_reviews
+
+      puts "\nPlease enter HIKE ID:"
+      id = gets.chomp.strip
+
+      display_review(id)
+      update_rating_and_review(nil, nil, id)
+
+      puts "\nYou successfully deleted this review!"
     end
 
 
@@ -163,9 +184,10 @@ class User < ActiveRecord::Base
   end
 
   def display_review(hike_id)
-    hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
-
-    puts "Rating: #{hike.rating}  --- #{hike.review}"
+    saved_hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
+    hike = Hike.all.where(id: hike_id)
+    puts "\nHIKE ID: #{hike_id} - #{hike[0].name}\n-----------------------------------------"
+    puts "Rating: #{saved_hike[0].rating}  --- #{saved_hike[0].review}"
   end
 
 end

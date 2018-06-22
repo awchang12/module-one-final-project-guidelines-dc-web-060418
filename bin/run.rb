@@ -27,6 +27,18 @@ until response == "exit"
   when "writereview"
     user = User.find_by_id(user.id)
     user.write_review
+
+  when "updatereview"
+    user = User.find_by_id(user.id)
+    user.update_review
+
+  when "displaymyreviews"
+    user = User.find_by_id(user.id)
+    user.display_users_reviews
+
+  when "deleteareview"
+    user = User.find_by_id(user.id)
+    user.delete_user_review
   else
     invalid_command
 
