@@ -22,6 +22,7 @@ def help
     - update review:         update a review you've already submitted.
     - display my reviews:    displays reviews you've written.
     - delete a review:       deletes a review you've written.
+    - read reviews:          read all reviews for a given hike.
     - exit:                  exits this program.\n\n"
 end
 

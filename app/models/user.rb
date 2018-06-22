@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
         else
           puts "\nHere are your current hikes:\n\n"
             sorted_by_id = self.hikes.sort_by{|hike| hike.id}
-            display_hikes(sorted_by_id)
+            Hike.display_hikes(sorted_by_id)
         end
     end
 
@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
         puts "\nWe could not locate any hikes with this input.\n\n"
         self.search_by_difficulty
       else
-        display_hikes(hikes_arr)
+        Hike.display_hikes(hikes_arr)
         self.save_hike_from_search
       end
 

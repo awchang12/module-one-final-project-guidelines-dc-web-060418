@@ -39,6 +39,11 @@ until response == "exit"
   when "deleteareview"
     user = User.find_by_id(user.id)
     user.delete_user_review
+
+  when "readreviews"
+    user = User.find_by_id(user.id)
+    SavedHike.read_reviews
+    
   else
     invalid_command
 
