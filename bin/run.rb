@@ -1,7 +1,7 @@
 require_relative '../config/environment'
 require_relative './run_helper'
 
-#---- runs the cli app ---
+#---- RUNS THE CLI APP -----
 
 welcome
 user = get_user_name
@@ -23,6 +23,26 @@ until response == "exit"
   when "deletehike"
     user = User.find_by_id(user.id)
     user.delete_hike
+
+  when "writereview"
+    user = User.find_by_id(user.id)
+    user.write_review
+
+  when "updatereview"
+    user = User.find_by_id(user.id)
+    user.update_review
+
+  when "displaymyreviews"
+    user = User.find_by_id(user.id)
+    user.display_users_reviews
+
+  when "deleteareview"
+    user = User.find_by_id(user.id)
+    user.delete_user_review
+
+  when "readreviews"
+    user = User.find_by_id(user.id)
+    SavedHike.read_reviews
 
   else
     invalid_command

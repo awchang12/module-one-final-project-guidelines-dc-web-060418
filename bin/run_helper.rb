@@ -1,5 +1,6 @@
 require_relative '../config/environment'
 
+#------------------------ HELPER METHODS FOR THE CLI RUNNER -------------------------------
 def welcome
     puts "\nWelcome to our Hiking Application!\n\nWe've collected for you a list of hikes around the D.C. region!\nIn this application you will be able to search the region for your soon to be favorite hikes!\n\n"
 end
@@ -18,6 +19,11 @@ def help
     - search by difficulty:  searches the list of hikes based on difficulty.
     - my hikes:              displays a list of your saved hikes.
     - delete hike:           deletes specified hike from your saved hikes.
+    - write review:          write a review for one of your saved hikes.
+    - update review:         update a review you've already submitted.
+    - display my reviews:    displays reviews you've written.
+    - delete a review:       deletes a review you've written.
+    - read reviews:          read all reviews for a given hike.
     - exit:                  exits this program.\n\n"
 end
 
