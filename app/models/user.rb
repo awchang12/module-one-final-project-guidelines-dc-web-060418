@@ -3,7 +3,9 @@ class User < ActiveRecord::Base
   has_many :hikes, through: :saved_hikes
 
 
-    def delete_hike
+  #---------------------- METHODS USED IN RUN FILE ----------------------------
+
+    def delete_hike 
       self.display_my_hikes
 
       puts "\nPlease enter a Hike ID to delete:"
@@ -11,7 +13,7 @@ class User < ActiveRecord::Base
 
       if self.hikes.any?{|hike| hike.id == users_hike_id_response.to_i}
 
-        self.delete_hike_from_db(users_hike_id_response)
+        SavedHike.delete_hike_from_db(users_hike_id_response, self.id)
 
         puts "You successfully deleted the Hike!\n\n"
 
@@ -23,7 +25,7 @@ class User < ActiveRecord::Base
 
     def display_my_hikes
         if self.hikes.empty?
-            puts "You have 0 saved hikes.\n\n"
+            puts "\nYou have 0 saved hikes.\n\n"
         else
           puts "\nHere are your current hikes:\n\n"
             sorted_by_id = self.hikes.sort_by{|hike| hike.id}
@@ -34,11 +36,11 @@ class User < ActiveRecord::Base
 
     def search_by_length
 
-      puts "\nPlease enter a number for minimum distance:"
-      min_distance = gets.chomp.strip
+      puts "\nPlease enter a number for MINIMUM DISTANCE:"
+      min_distance = gets.chomp.gsub(/[.\s]/, "")
 
-      puts "\nPlease enter a number for maximum distance:"
-      max_distance = gets.chomp.strip
+      puts "\nPlease enter a number for MAXIMUM DISTANCE:"
+      max_distance = gets.chomp.gsub(/[.\s]/, "")
 
       hikes_arr = Hike.search_hikes_by_length(min_distance, max_distance)
 
@@ -46,12 +48,11 @@ class User < ActiveRecord::Base
         puts "We could not locate any hikes with this input.\nEither input was invalid or hikes could not be found within the given range."
         self.search_by_length
       else
-        display_hikes(hikes_arr)
+        Hike.display_hikes(hikes_arr)
         self.save_hike_from_search
       end
 
     end
-
 
 
     def search_by_difficulty
@@ -76,7 +77,7 @@ class User < ActiveRecord::Base
       self.display_my_hikes
 
       puts "\nEnter HIKE ID of hike you would like to review:"
-      id = gets.chomp.strip
+      hike_id = gets.chomp.gsub(/[.\s]/, "")
 
       puts "\nEnter your rating for the hike! 1 being lowest - 5 highest."
       rating = gets.chomp.strip.to_i
@@ -84,7 +85,7 @@ class User < ActiveRecord::Base
       puts "\nWrite a brief statement of your experience!"
       review = gets.chomp.strip
 
-      self.update_rating_and_review(rating, review, id)
+      SavedHike.update_rating_and_review(rating, review, hike_id, self.id)
 
       puts "\nThanks for your feedback! Your input makes our application more valuable to our users!\n\n"
 
@@ -94,17 +95,17 @@ class User < ActiveRecord::Base
       self.display_my_hikes
 
       puts "\nEnter HIKE ID of hike you would like to change:"
-      id = gets.chomp.strip
+      hike_id = gets.chomp.gsub(/[.\s]/, "")
 
-      self.display_review(id)
+      SavedHike.display_review(hike_id, self.id)
 
       puts "\nPlease update your rating here:"
-      rating = gets.chomp.strip
+      rating = gets.chomp.gsub(/[.\s]/, "")
 
       puts "\nPlease update your review here:"
       review = gets.chomp.strip
 
-      self.update_rating_and_review(rating, review, id)
+      SavedHike.update_rating_and_review(rating, review, hike_id, self.id)
 
       puts "\nThanks for your updated feedback!"
 
@@ -114,7 +115,7 @@ class User < ActiveRecord::Base
       user_hikes = SavedHike.all.where(user_id: self.id)
       user_hikes.each do |saved_hike|
         if saved_hike.review != nil && saved_hike.rating != nil
-          display_review(saved_hike.hike_id)
+          SavedHike.display_review(saved_hike.hike_id, self.id)
         end
       end
     end
@@ -123,10 +124,10 @@ class User < ActiveRecord::Base
       self.display_users_reviews
 
       puts "\nPlease enter HIKE ID:"
-      id = gets.chomp.strip
+      hike_id = gets.chomp.gsub(/[.\s]/, "")
 
-      display_review(id)
-      update_rating_and_review(nil, nil, id)
+      SavedHike.display_review(hike_id, self.id)
+      SavedHike.update_rating_and_review(nil, nil, hike_id, self.id)
 
       puts "\nYou successfully deleted this review!"
     end
@@ -134,11 +135,10 @@ class User < ActiveRecord::Base
 
 
 
+#------------------------- HELPER METHODS FOR SAVING HIKES -------------------------------------
 
-#------------ HELPER METHODS -------------------------------------
 
   def save_hike_from_search
-
     user_answer = yes_or_no?
 
     case user_answer
@@ -162,32 +162,8 @@ class User < ActiveRecord::Base
     puts "\nPlease enter a Hike ID"
     users_hike_id_response = gets.chomp.gsub(/[.\s]/, "")
     # Still need to take into account if response is not a number. we will come to it if we have time.
-    self.save_hike(users_hike_id_response)
+    SavedHike.save_hike(users_hike_id_response, self.id)
     puts "\nThis hike has been saved to your Hikes\n\n"
-  end
-
-  def save_hike(num)
-      SavedHike.find_or_create_by(
-          user_id: self.id,
-          hike_id: num
-      )
-  end
-
-  def delete_hike_from_db(num)
-      SavedHike.where(user_id: self.id, hike_id: num).destroy_all
-      self.hikes.delete(hike_id: num)
-  end
-
-  def update_rating_and_review(rating, review, hike_id)
-    hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
-    hike.update(rating: rating, review: review)
-  end
-
-  def display_review(hike_id)
-    saved_hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
-    hike = Hike.all.where(id: hike_id)
-    puts "\nHIKE ID: #{hike_id} - #{hike[0].name}\n-----------------------------------------"
-    puts "Rating: #{saved_hike[0].rating}  --- #{saved_hike[0].review}"
   end
 
 end

@@ -2,6 +2,8 @@ class Hike < ActiveRecord::Base
     has_many :saved_hikes
     has_many :users, through: :saved_hikes
 
+#---------------------- HELPER METHODS FOR QUERYING THE HIKE TABLE ------------------------------
+
     def self.search_hikes_by_length(min_length, max_length)
         hike_arr = Hike.all.where("length >= ? AND length <= ?",  min_length, max_length)
         sorted_by_id = hike_arr.sort_by {|hike| hike.id}

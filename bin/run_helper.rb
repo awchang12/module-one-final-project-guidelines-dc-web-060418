@@ -1,5 +1,6 @@
 require_relative '../config/environment'
 
+#------------------------ HELPER METHODS FOR THE CLI RUNNER -------------------------------
 def welcome
     puts "\nWelcome to our Hiking Application!\n\nWe've collected for you a list of hikes around the D.C. region!\nIn this application you will be able to search the region for your soon to be favorite hikes!\n\n"
 end
