@@ -84,19 +84,40 @@ class User < ActiveRecord::Base
       puts "\nWrite a brief statement of your experience!"
       review = gets.chomp.strip
 
-      self.save_rating_and_review(rating, review, id)
+      self.update_rating_and_review(rating, review, id)
 
       puts "\nThanks for your feedback! Your input makes our application more valuable to our users!\n\n"
-      
+
     end
+
+    def update_review
+      self.display_hikes
+
+      puts "\nEnter HIKE ID of hike you would like to change:"
+      id = gets.chomp.strip
+
+      self.display_review(id)
+
+      puts "\nPlease update your rating here:"
+      rating = gets.chomp.strip
+
+      puts "\nPlease update your review here:"
+      review = gets.chomp.strip
+
+      self.update_rating_and_review(rating, review, id)
+
+      puts "\nThanks for your updated feedback!"
+
+    end
+
+
+
 
 
 #------------ HELPER METHODS -------------------------------------
 
   def save_hike_from_search
-    # puts "Would you like to save a hike? yes or no?\n\n"
 
-    # users_yes_or_no = gets.chomp.downcase.strip
     user_answer = yes_or_no?
 
     case user_answer
@@ -136,9 +157,15 @@ class User < ActiveRecord::Base
       self.hikes.delete(hike_id: num)
   end
 
-  def save_rating_and_review(rating, review, hike_id)
+  def update_rating_and_review(rating, review, hike_id)
     hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
     hike.update(rating: rating, review: review)
+  end
+
+  def display_review(hike_id)
+    hike = SavedHike.where(user_id: self.id, hike_id: hike_id)
+
+    puts "Rating: #{hike.rating}  --- #{hike.review}"
   end
 
 end
